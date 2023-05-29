@@ -1,8 +1,5 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://wwww.thymeleaf.org">
 <head>
     <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.2.0/css/bootstrap.min.css">
     <meta charset="UTF-8">
@@ -38,37 +35,36 @@
     </div>
 </nav>
 <main>
-    <div layout:fragment="content1" class=" container mt-2 my-lg-2">
-        <div class="col-md-6 offset-3">
-    <form action="UpdatePatient" method="post">
+    <div  class=" container mt-2 my-lg-2">
+        <div  class="col-md-6 offset-3">
+    <form th:action="@{UpdatePatient}" method="post">
         <div>
            <!-- <label for="idPatient">Patient Id : </label> <-->
-            <input type="hidden"  class="form-control" type="text" id="idPatient" name="nom" value="${patientJsp.id}">
+            <input type="hidden"  class="form-control" type="text" id="idPatient" name="id" th:value="${patientJsp.id}">
         </div>
         <div>
             <label for="namePatient">Patient Name : </label>
-            <input class="form-control" type="text" id="namePatient" name="nom" value="${patientJsp.nom}">
+            <input class="form-control" type="text" id="namePatient" name="nom" th:value="${patientJsp.nom}">
         </div>
         <div>
             <label for="dateBirth">Birth : </label>
-            <fmt:formatDate pattern="yyyyy-MM-dd" value="${patientJsp.dateNaissance}" var="formatDate" />
-            <input class="form-control" type="date" id="dateBirth" name="dateNaissance" value="${formatDate}">
+            <input class="form-control" type="date" id="dateBirth" name="dateNaissance" th:value="${patientJsp.dateNaissance}">
         </div>
         <div>
             <label for="adressPatient">Adress : </label>
-            <input class="form-control" type="text" id="adressPatient" name="adresse" value="${patientJsp.adresse}">
+            <input class="form-control" type="text" id="adressPatient" name="adresse" th:value="${patientJsp.adresse}">
         </div>
         <div>
             <label for="CodePostal">CodePostal : </label>
-            <input class="form-control" type="text" id="CodePostal" name="codePostal" value="${patientJsp.codePostal}">
+            <input class="form-control" type="text" id="CodePostal" name="codePostal" th:value="${patientJsp.codePostal}">
         </div>
         <div>
             <label for="phonePatient">Phone Number : </label>
-            <input class="form-control" type="text" id="phonePatient" name="numeroTelephone" value="${patientJsp.numeroTelephone}">
+            <input class="form-control" type="text" id="phonePatient" name="numeroTelephone" th:value="${patientJsp.numeroTelephone}">
         </div>
         <div>
             <label for="sicknessPatient">Sickness : </label>
-            <input  type="checkbox" id="sicknessPatient" name="malade" value="${patientJsp.malade}">
+            <input  type="checkbox" id="sicknessPatient" name="malade" th:value="${patientJsp.malade}">
         </div>
 
 

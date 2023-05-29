@@ -1,6 +1,7 @@
 package com.example.dfproject.services;
 
 import com.example.dfproject.entities.Patient;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface HopitalService {
     List<Patient> getAllPatients();
     void deletePatientById(Long id);
     void deleteAllPatients();
+    Page<Patient> getAlllPatientsByPage(int page,int size);
 }

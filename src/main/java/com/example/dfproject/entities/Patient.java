@@ -1,9 +1,10 @@
 package com.example.dfproject.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.NotFound;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,15 +15,23 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Size(min = 6,max = 25)
     @NotFound
     private String nom;
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private Date dateNaissance;
     private boolean malade;
+    @Size(min = 6,max = 50)
     private String adresse;
     private String codePostal;
+    @Size(min = 10,max = 15)
     private String numeroTelephone;
     //private Titre titre;
+    @ManyToOne
+    private  Medecin medecin;
 
     public Patient(
 

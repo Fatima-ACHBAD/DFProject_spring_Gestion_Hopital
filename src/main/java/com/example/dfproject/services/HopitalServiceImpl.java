@@ -3,6 +3,8 @@ package com.example.dfproject.services;
 import com.example.dfproject.entities.Patient;
 import com.example.dfproject.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,5 +43,10 @@ public class HopitalServiceImpl implements HopitalService {
     public void deleteAllPatients() {
         patientRepository.deleteAll();
 
+    }
+
+    @Override
+    public Page<Patient> getAlllPatientsByPage(int page, int size) {
+        return patientRepository.findAll(PageRequest.of(page,size));
     }
 }

@@ -3,11 +3,15 @@ package com.example.dfproject.controllers;
 import com.example.dfproject.entities.Patient;
 import com.example.dfproject.repositories.PatientRepository;
 import com.example.dfproject.services.HopitalService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Binding;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,31 +49,33 @@ public class PatientController {
     }
     @RequestMapping("/savePatient")
     public  String savePatient(
-            @ModelAttribute ("patient") Patient patient,
-            @RequestParam("dateNaissance") String dateNaissanceController,
-            ModelMap modelMap)
-        throws ParseException {
-            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        Date datebirth= dateFormat.parse(String.valueOf(dateNaissanceController));
-        patient.setDateNaissance(datebirth);
-
-        Patient memo = hopitalService.savePatient(patient);
-        String messaageController ="the Patient whose Id  :"+memo.getId()+"is saved";
-        modelMap.addAttribute("messageJsp",messaageController);
-    return "CreatePatient";
+            @Valid Patient patient, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) return "CreatePatient";
+             Patient memo = hopitalService.savePatient(patient);
+             return "CreatePatient";
     }
     @RequestMapping("/patientList")
-    public String patientList(ModelMap modelMap){
-        List<Patient> patientsController=hopitalService.getAllPatients();
+    public String patientList(ModelMap modelMap,
+                              @RequestParam(name = "page",defaultValue = "0") int page,
+                              @RequestParam(name = "size",defaultValue = "1")int size)
+    {
+        Page<Patient> patientsController=hopitalService.getAlllPatientsByPage(page, size);
         modelMap.addAttribute("patientJsp",patientsController);
+        modelMap.addAttribute("pages",new int[patientsController.getTotalPages()]);
+        modelMap.addAttribute("currentPage",page);
         return "PatientList";
 
     }
     @RequestMapping("/deletePatient")
-    public String deletePatient(@RequestParam("id") Long id,ModelMap modelMap ){
+    public String deletePatient(@RequestParam("id") Long id,ModelMap modelMap,
+                                @RequestParam(name = "page",defaultValue = "0") int page,
+                                @RequestParam(name = "size",defaultValue = "1")int size)
+    {
         hopitalService.deletePatientById(id);
-        List<Patient> patientsController=hopitalService.getAllPatients();
+        Page<Patient> patientsController=hopitalService.getAlllPatientsByPage(page, size);
         modelMap.addAttribute("patientJsp",patientsController);
+        modelMap.addAttribute("pages",new int[patientsController.getTotalPages()]);
+        modelMap.addAttribute("currentPage",page);
         return "PatientList";
     }
     @RequestMapping("/showPatient")
@@ -77,6 +83,24 @@ public class PatientController {
         Patient patientController = hopitalService.getPatient(id);
         modelMap.addAttribute("patientJsp",patientController);
         return "EditPatient";
+    }
+    @RequestMapping("/UpdatePatient")
+    public  String updatePatient(@ModelAttribute ("patient") Patient patient)
+            {
+       Patient memo = hopitalService.savePatient(patient);
+        return "CreatePatient";
+    }
+    @GetMapping("/")
+    public  String home(){
+        return "redirect:/patientList";
+    }
+    @GetMapping("/accessDenied")
+    public  String accessDenied(){
+        return "accessDenied";
+    }
+    @GetMapping("/login")
+    public  String login(){
+        return "login";
     }
     }
 
